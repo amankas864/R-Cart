@@ -1,3 +1,30 @@
+# R-cart - Modern E-Commerce Platform
+
+A fully functional e-commerce web application built with Next.js and Tailwind CSS, featuring a complete shopping experience with modern UI/UX design.
+
+🌐 **Live Demo**: [https://r-cart-black.vercel.app/](https://r-cart-black.vercel.app/)
+
+## Features
+
+- 🏠 **Home Page** - Hero banner, featured products, categories preview
+- 🛍️ **Product Listing** - Advanced filtering, search, pagination, grid/list view
+- 📱 **Product Details** - Image gallery, reviews, add to cart/wishlist
+- ❤️ **Wishlist** - Save and manage favorite products
+- 🛒 **Shopping Cart** - Add/remove items, quantity management, real-time totals
+- 📂 **Categories** - Dynamic category pages with product listings
+- 🔐 **Authentication** - User registration/login with Clerk
+- 💳 **Checkout Flow** - Multi-step checkout with address management
+- 👨‍💼 **Admin Dashboard** - Complete product and order management
+- 📊 **Analytics** - Sales metrics and performance tracking
+
+## Tech Stack
+
+- **Frontend**: Next.js 15, React 19, Tailwind CSS
+- **Backend**: Next.js API Routes, MongoDB, Mongoose
+- **Authentication**: Clerk
+- **Deployment**: Vercel
+- **State Management**: Context API
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started

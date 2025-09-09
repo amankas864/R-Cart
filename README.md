@@ -27,6 +27,36 @@ A fully functional e-commerce web application built with Next.js and Tailwind CS
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Quick Setup
+
+### 1. Environment Variables
+Create a `.env.local` file in your project root:
+
+```bash
+# MongoDB Database (Required for full functionality)
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/
+
+# Clerk Authentication (Required for user features)
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_your_publishable_key_here
+CLERK_SECRET_KEY=sk_test_your_secret_key_here
+
+# Currency
+NEXT_PUBLIC_CURRENCY=$
+```
+
+### 2. Install and Run
+```bash
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+```
+
+### 3. Test Functionality
+- Visit [http://localhost:3000/test](http://localhost:3000/test) to test basic functionality
+- Visit [http://localhost:3000](http://localhost:3000) for the full application
+
 ## Getting Started
 
 First, run the development server:

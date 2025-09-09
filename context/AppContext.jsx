@@ -3,6 +3,7 @@ import { productsDummyData, userDummyData } from "@/assets/assets";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export const AppContext = createContext();
 
@@ -33,16 +34,20 @@ export const AppContextProvider = (props) => {
     }
 
     const addToCart = async (itemId) => {
-
-        let cartData = structuredClone(cartItems);
-        if (cartData[itemId]) {
-            cartData[itemId] += 1;
+        try {
+            let cartData = structuredClone(cartItems);
+            if (cartData[itemId]) {
+                cartData[itemId] += 1;
+            }
+            else {
+                cartData[itemId] = 1;
+            }
+            setCartItems(cartData);
+            toast.success('Added to cart');
+        } catch (error) {
+            console.error('Error adding to cart:', error);
+            toast.error('Failed to add to cart');
         }
-        else {
-            cartData[itemId] = 1;
-        }
-        setCartItems(cartData);
-
     }
 
     const updateCartQuantity = async (itemId, quantity) => {
@@ -79,10 +84,17 @@ export const AppContextProvider = (props) => {
     }
 
     const addToWishlist = async (productId) => {
-        if (wishlist.includes(productId)) {
-            setWishlist(wishlist.filter(id => id !== productId));
-        } else {
-            setWishlist([...wishlist, productId]);
+        try {
+            if (wishlist.includes(productId)) {
+                setWishlist(wishlist.filter(id => id !== productId));
+                toast.success('Removed from wishlist');
+            } else {
+                setWishlist([...wishlist, productId]);
+                toast.success('Added to wishlist');
+            }
+        } catch (error) {
+            console.error('Error updating wishlist:', error);
+            toast.error('Failed to update wishlist');
         }
     }
 

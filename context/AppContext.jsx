@@ -21,6 +21,8 @@ export const AppContextProvider = (props) => {
     const [userData, setUserData] = useState(false)
     const [isSeller, setIsSeller] = useState(true)
     const [cartItems, setCartItems] = useState({})
+    const [wishlist, setWishlist] = useState([])
+    const [categories, setCategories] = useState([])
 
     const fetchProductData = async () => {
         setProducts(productsDummyData)
@@ -76,12 +78,39 @@ export const AppContextProvider = (props) => {
         return Math.floor(totalAmount * 100) / 100;
     }
 
+    const addToWishlist = async (productId) => {
+        if (wishlist.includes(productId)) {
+            setWishlist(wishlist.filter(id => id !== productId));
+        } else {
+            setWishlist([...wishlist, productId]);
+        }
+    }
+
+    const removeFromWishlist = async (productId) => {
+        setWishlist(wishlist.filter(id => id !== productId));
+    }
+
+    const isInWishlist = (productId) => {
+        return wishlist.includes(productId);
+    }
+
+    const fetchCategories = async () => {
+        // This will be implemented with API call later
+        setCategories([
+            { _id: '1', name: 'Electronics', slug: 'electronics', image: '/api/placeholder/300/200' },
+            { _id: '2', name: 'Clothing', slug: 'clothing', image: '/api/placeholder/300/200' },
+            { _id: '3', name: 'Home & Garden', slug: 'home-garden', image: '/api/placeholder/300/200' },
+            { _id: '4', name: 'Sports', slug: 'sports', image: '/api/placeholder/300/200' }
+        ]);
+    }
+
     useEffect(() => {
         fetchProductData()
     }, [])
 
     useEffect(() => {
         fetchUserData()
+        fetchCategories()
     }, [])
 
     const value = {
@@ -92,7 +121,11 @@ export const AppContextProvider = (props) => {
         products, fetchProductData,
         cartItems, setCartItems,
         addToCart, updateCartQuantity,
-        getCartCount, getCartAmount
+        getCartCount, getCartAmount,
+        wishlist, setWishlist,
+        addToWishlist, removeFromWishlist,
+        isInWishlist,
+        categories, fetchCategories
     }
 
     return (

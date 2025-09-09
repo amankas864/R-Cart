@@ -26,6 +26,12 @@ const Navbar = () => {
         <Link href="/all-products" className="hover:text-gray-900 transition">
           Shop
         </Link>
+        <Link href="/categories" className="hover:text-gray-900 transition">
+          Categories
+        </Link>
+        <Link href="/wishlist" className="hover:text-gray-900 transition">
+          Wishlist
+        </Link>
         <Link href="/" className="hover:text-gray-900 transition">
           About Us
         </Link>
@@ -41,6 +47,9 @@ const Navbar = () => {
         <Image className="w-4 h-4" src={assets.search_icon} alt="search icon" />
         { user ? <>
           <UserButton>
+            <UserButton.MenuItems>
+              <UserButton.Action label="Wishlist" labelIcon={<BoxIcon/>} onClick={() => router.push('/wishlist')}/>
+            </UserButton.MenuItems>
             <UserButton.MenuItems>
               <UserButton.Action label="Cart" labelIcon={<CartIcon/>} onClick={() => router.push('/cart')}/>
             </UserButton.MenuItems>
@@ -64,6 +73,9 @@ const Navbar = () => {
             </UserButton.MenuItems>
             <UserButton.MenuItems>
               <UserButton.Action label="Products" labelIcon={<BoxIcon/>} onClick={() => router.push('/all-products')}/>
+            </UserButton.MenuItems>
+            <UserButton.MenuItems>
+              <UserButton.Action label="Wishlist" labelIcon={<BoxIcon/>} onClick={() => router.push('/wishlist')}/>
             </UserButton.MenuItems>
             <UserButton.MenuItems>
               <UserButton.Action label="Cart" labelIcon={<CartIcon/>} onClick={() => router.push('/cart')}/>

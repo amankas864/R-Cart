@@ -21,8 +21,44 @@ const userSchema = new mongoose.Schema({
     cartItems: {
         type: Object,
         default: {}
+    },
+    wishlist: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product'
+    }],
+    role: {
+        type: String,
+        enum: ['customer', 'seller', 'admin'],
+        default: 'customer'
+    },
+    isActive: {
+        type: Boolean,
+        default: true
+    },
+    preferences: {
+        currency: {
+            type: String,
+            default: 'USD'
+        },
+        language: {
+            type: String,
+            default: 'en'
+        },
+        notifications: {
+            email: {
+                type: Boolean,
+                default: true
+            },
+            sms: {
+                type: Boolean,
+                default: false
+            }
+        }
     }
-    }, {minimize: false});
+}, {
+    timestamps: true,
+    minimize: false
+});
 
 const User = mongoose.models.User || mongoose.model("User", userSchema);
 

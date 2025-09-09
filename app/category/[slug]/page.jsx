@@ -6,19 +6,31 @@ import { useAppContext } from "@/context/AppContext";
 import { assets } from "@/assets/assets";
 import Image from "next/image";
 import { useState, useMemo } from "react";
+import { useParams } from "next/navigation";
 
-const AllProducts = () => {
+const CategoryPage = () => {
     const { products, categories } = useAppContext();
+    const params = useParams();
+    const categorySlug = params.slug;
+    
     const [searchTerm, setSearchTerm] = useState("");
-    const [selectedCategory, setSelectedCategory] = useState("");
     const [sortBy, setSortBy] = useState("name");
     const [viewMode, setViewMode] = useState("grid");
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 12;
 
+    // Find the category
+    const category = categories.find(cat => cat.slug === categorySlug);
+
+    // Filter products by category
+    const categoryProducts = useMemo(() => {
+        if (!category) return [];
+        return products.filter(product => product.category === category.name);
+    }, [products, category]);
+
     // Filter and sort products
     const filteredProducts = useMemo(() => {
-        let filtered = products;
+        let filtered = categoryProducts;
 
         // Search filter
         if (searchTerm) {
@@ -26,11 +38,6 @@ const AllProducts = () => {
                 product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                 product.description.toLowerCase().includes(searchTerm.toLowerCase())
             );
-        }
-
-        // Category filter
-        if (selectedCategory) {
-            filtered = filtered.filter(product => product.category === selectedCategory);
         }
 
         // Sort products
@@ -50,7 +57,7 @@ const AllProducts = () => {
         });
 
         return filtered;
-    }, [products, searchTerm, selectedCategory, sortBy]);
+    }, [categoryProducts, searchTerm, sortBy]);
 
     // Pagination
     const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
@@ -62,18 +69,55 @@ const AllProducts = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
+    if (!category) {
+        return (
+            <>
+                <Navbar />
+                <div className="px-6 md:px-16 lg:px-32 pt-14 pb-20">
+                    <div className="text-center py-20">
+                        <h1 className="text-2xl font-medium text-gray-700 mb-4">Category not found</h1>
+                        <p className="text-gray-500 mb-8">The category you're looking for doesn't exist.</p>
+                        <button
+                            onClick={() => window.location.href = '/all-products'}
+                            className="bg-orange-600 text-white px-8 py-3 rounded-lg hover:bg-orange-700 transition"
+                        >
+                            Browse All Products
+                        </button>
+                    </div>
+                </div>
+                <Footer />
+            </>
+        );
+    }
+
     return (
         <>
             <Navbar />
             <div className="px-6 md:px-16 lg:px-32 pt-14 pb-20">
-                {/* Header */}
-                <div className="flex flex-col items-start mb-8">
-                    <h1 className="text-2xl md:text-3xl font-medium text-gray-700 mb-2">
-                        All Products
-                    </h1>
-                    <p className="text-gray-500">
-                        {filteredProducts.length} products found
-                    </p>
+                {/* Category Header */}
+                <div className="mb-8">
+                    <div className="flex items-center gap-4 mb-4">
+                        <div className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center">
+                            <Image
+                                src={category.image}
+                                alt={category.name}
+                                className="w-12 h-12 object-cover"
+                                width={48}
+                                height={48}
+                            />
+                        </div>
+                        <div>
+                            <h1 className="text-2xl md:text-3xl font-medium text-gray-700">
+                                {category.name}
+                            </h1>
+                            <p className="text-gray-500">
+                                {filteredProducts.length} products in this category
+                            </p>
+                        </div>
+                    </div>
+                    {category.description && (
+                        <p className="text-gray-600 max-w-3xl">{category.description}</p>
+                    )}
                 </div>
 
                 {/* Filters and Search */}
@@ -83,7 +127,7 @@ const AllProducts = () => {
                         <div className="relative">
                             <input
                                 type="text"
-                                placeholder="Search products..."
+                                placeholder={`Search in ${category.name}...`}
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
@@ -94,22 +138,6 @@ const AllProducts = () => {
                                 className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400"
                             />
                         </div>
-                    </div>
-
-                    {/* Category Filter */}
-                    <div className="lg:w-48">
-                        <select
-                            value={selectedCategory}
-                            onChange={(e) => setSelectedCategory(e.target.value)}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                        >
-                            <option value="">All Categories</option>
-                            {categories.map(category => (
-                                <option key={category._id} value={category.name}>
-                                    {category.name}
-                                </option>
-                            ))}
-                        </select>
                     </div>
 
                     {/* Sort */}
@@ -147,11 +175,10 @@ const AllProducts = () => {
                 {paginatedProducts.length === 0 ? (
                     <div className="text-center py-20">
                         <h2 className="text-2xl font-medium text-gray-700 mb-4">No products found</h2>
-                        <p className="text-gray-500 mb-8">Try adjusting your search or filter criteria</p>
+                        <p className="text-gray-500 mb-8">Try adjusting your search criteria</p>
                         <button
                             onClick={() => {
                                 setSearchTerm("");
-                                setSelectedCategory("");
                                 setSortBy("name");
                             }}
                             className="bg-orange-600 text-white px-8 py-3 rounded-lg hover:bg-orange-700 transition"
@@ -213,4 +240,4 @@ const AllProducts = () => {
     );
 };
 
-export default AllProducts;
+export default CategoryPage;

@@ -102,14 +102,24 @@ const Cart = () => {
               </tbody>
             </table>
           </div>
-          <button onClick={()=> router.push('/all-products')} className="group flex items-center mt-6 gap-2 text-orange-600">
-            <Image
-              className="group-hover:-translate-x-1 transition"
-              src={assets.arrow_right_icon_colored}
-              alt="arrow_right_icon_colored"
-            />
-            Continue Shopping
-          </button>
+          <div className="flex flex-col sm:flex-row gap-4 mt-6">
+            <button onClick={()=> router.push('/all-products')} className="group flex items-center justify-center gap-2 text-orange-600 border border-orange-600 px-6 py-3 rounded-lg hover:bg-orange-50 transition">
+              <Image
+                className="group-hover:-translate-x-1 transition"
+                src={assets.arrow_right_icon_colored}
+                alt="arrow_right_icon_colored"
+              />
+              Continue Shopping
+            </button>
+            {getCartCount() > 0 && (
+              <button 
+                onClick={() => router.push('/checkout')} 
+                className="bg-orange-600 text-white px-8 py-3 rounded-lg hover:bg-orange-700 transition font-medium"
+              >
+                Proceed to Checkout
+              </button>
+            )}
+          </div>
         </div>
         <OrderSummary />
       </div>
